@@ -7,6 +7,6 @@ Prepared by Allison Horst
 
 ### Data (TODO): 
 
-Top costumes by state: 
-Top candy by state: 
+- Top costumes by state: 
+- Top candy by state: 
 
