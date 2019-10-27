@@ -4,10 +4,10 @@ Allison Horst
 
 **Objectives:**
 
-- Learn about general Shiny structure (ui + server)
+- Introduce general Shiny structure (ui + server)
 - Create widgets for user selection
-- Understand basics of reactivity (reactive inputs & outputs)
-- Build a little reactive app
+- Understand basics of reactivity (reactive inputs & rendered outputs)
+- Build a reactive app
 
 ---------
 
