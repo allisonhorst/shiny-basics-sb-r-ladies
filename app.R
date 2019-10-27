@@ -5,13 +5,9 @@
 library(shiny)
 library(shinythemes)
 library(tidyverse)
+library(glue)
 
 spooky <- read_csv("spooky_data.csv")
-
-# TESTING::::
-costume_rank_test <- spooky %>%
-    filter(costume == "Wonder Woman") %>%
-    count(rank)
 
 # Create the user interface:
 ui <- fluidPage(
@@ -23,13 +19,14 @@ ui <- fluidPage(
                               label = "Choose state:",
                               choices = unique(spooky$state)
                  ),
-                 radioButtons(inputId = "costume_select",
-                              label = "Choose a costume:",
-                              choices = c("Wonder Woman", "Witch", "Clown"))
+                 radioButtons(inputId = "region_select",
+                              label = "Choose a region:",
+                              choices = unique(spooky$region_us_census))
                  ),
     mainPanel(h1("Happy Halloween!"),
-              p("Then some paragraph text."),
+              p("State's top candies:"),
               tableOutput(outputId = "candy_table"),
+              p("Region's top costumes:"),
               plotOutput(outputId = "costume_graph")
               )
 )
@@ -38,29 +35,29 @@ ui <- fluidPage(
 # Create the server:
 server <- function(input, output) {
 
-# Make a reactive expression to filter the data based on the user-selected state
-# That's input 'state_select'
-
 state_candy <- reactive({
     spooky %>%
-      filter(state == input$state_select)
+      filter(state == input$state_select) %>%
+    select(candy, pounds_candy_sold)
   })
 
-costume_ranks <- reactive({
+region_costume <- reactive({
   spooky %>%
-    filter(costume == input$costume_select) %>%
-    count(rank)
-})
+    filter(region_us_census == input$region_select) %>%
+    count(costume, rank)
 
-# OK, so when the input is selected, the data frame should only contain the observations for that state! & we'll use that subset to make a graph of candies...
+})
 
 output$candy_table <- renderTable({
   state_candy()
 })
 
 output$costume_graph <- renderPlot({
-  ggplot(costume_ranks(), aes(x = rank, y = n)) +
-    geom_col()
+  ggplot(region_costume(), aes(x = costume, y = n)) +
+    geom_col(aes(fill = rank)) +
+    coord_flip() +
+    scale_fill_manual(values = c("black","purple","orange")) +
+    theme_minimal()
 })
 
 }

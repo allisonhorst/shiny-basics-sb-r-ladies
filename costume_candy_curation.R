@@ -7,7 +7,7 @@ costume_candy <- read_csv("costume_candy.csv")
 
 # Wrangle to tidy by costume rank for each state
 costumes <- costume_candy %>%
-  select(state, costume_rank1:costume_rank5) %>%
+  select(state, region_us_census, costume_rank1:costume_rank5) %>%
   pivot_longer(costume_rank1:costume_rank5, names_to = "rank", values_to = "costume") %>%
   mutate(
     rank = case_when(
