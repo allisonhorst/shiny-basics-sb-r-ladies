@@ -13,7 +13,8 @@ Allison Horst
 
 ### Requirements & Materials
 
-- **Slides** from this session are [here](https://docs.google.com/presentation/d/1QVgvVsVoYOXjqHKKx2o-cMOYLdh7FAq8Hyv_y-dSZmI/edit?usp=sharing) 
+- [Slides for this session](https://docs.google.com/presentation/d/1QVgvVsVoYOXjqHKKx2o-cMOYLdh7FAq8Hyv_y-dSZmI/edit?usp=sharing) 
+- [Teaching key for this session](https://docs.google.com/document/d/1Je6tCd5ZFUCSa3ZG3gAsjLQBCdOFBbO1kzG06psKxJQ/edit?usp=sharing)
 
 - **Required R packages:**
 
