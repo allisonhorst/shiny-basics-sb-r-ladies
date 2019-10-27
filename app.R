@@ -3,30 +3,67 @@
 # Prepared by Allison Horst
 
 library(shiny)
+library(shinythemes)
 library(tidyverse)
 
-scary_data <- read_csv("costume_candy.csv")
+spooky <- read_csv("spooky_data.csv")
 
-top_costumes <- scary_data %>%
-  count(costume_rank1) %>%
-  arrange(-n)
+# TESTING::::
+costume_rank_test <- spooky %>%
+    filter(costume == "Wonder Woman") %>%
+    count(rank)
 
 # Create the user interface:
 ui <- fluidPage(
+  theme = shinytheme("slate"),
   titlePanel("A spooky Shiny app!"),
   sidebarLayout(
     sidebarPanel("put my widgets here",
-                 radioButtons(inputId = "region",
-                              label = "Choose region in US",
-                              choices = unique(scary_data$region_us_census)
-                 )
+                 selectInput(inputId = "state_select",
+                              label = "Choose state:",
+                              choices = unique(spooky$state)
                  ),
-    mainPanel("put my graph here")
-  )
+                 radioButtons(inputId = "costume_select",
+                              label = "Choose a costume:",
+                              choices = c("Wonder Woman", "Witch", "Clown"))
+                 ),
+    mainPanel(h1("Happy Halloween!"),
+              p("Then some paragraph text."),
+              tableOutput(outputId = "candy_table"),
+              plotOutput(outputId = "costume_graph")
+              )
+)
 )
 
 # Create the server:
-server <- function(input, output) {}
+server <- function(input, output) {
+
+# Make a reactive expression to filter the data based on the user-selected state
+# That's input 'state_select'
+
+state_candy <- reactive({
+    spooky %>%
+      filter(state == input$state_select)
+  })
+
+costume_ranks <- reactive({
+  spooky %>%
+    filter(costume == input$costume_select) %>%
+    count(rank)
+})
+
+# OK, so when the input is selected, the data frame should only contain the observations for that state! & we'll use that subset to make a graph of candies...
+
+output$candy_table <- renderTable({
+  state_candy()
+})
+
+output$costume_graph <- renderPlot({
+  ggplot(costume_ranks(), aes(x = rank, y = n)) +
+    geom_col()
+})
+
+}
 
 # Combine them into an app:
 shinyApp(ui = ui, server = server)
